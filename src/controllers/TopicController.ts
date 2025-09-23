@@ -4,7 +4,7 @@ import { TopicFactory } from "../models/TopicFactory";
 import { TopicRepository } from "../repositories/TopicRepository";
 import { CreateTopicDto } from "../dtos/CreateTopicDto";
 import { UpdateTopicDto } from "../dtos/UpdateTopicDto";
-import { NotFoundError } from "../errors/AppError";
+import { NotFoundError, ValidationError } from "../errors/AppError";
 
 // Inicializar dependências
 const repository = new TopicRepository();
@@ -14,9 +14,19 @@ const service = new TopicService(repository, factory);
 export class TopicController {
     
   static async createTopic(req: Request, res: Response) {
-    const createTopicDto = req.body as CreateTopicDto;
-    const topic = await service.createTopic(createTopicDto);
-    res.status(201).json(topic);
+    const logger = (req as any).logger;
+
+    try {
+      const { name, content, parentTopicId } = req.body;
+      logger.info("create_topic_request_received", { bodyPreview: { name, contentLength: (content || "").length } });
+      const createTopicDto = req.body as CreateTopicDto;
+      const topic = await service.createTopic(createTopicDto);
+      logger.info("create_topic_request_success", { topicId: topic.topicId, id: topic.id });
+      res.status(201).json(topic);
+    } catch (err: any) {
+      logger.error("create_topic_request_failed", { error: err?.message, stack: err?.stack });
+      res.status(500).json({ message: "error" });
+    }
   }
 
   static async updateTopic(req: Request, res: Response) {

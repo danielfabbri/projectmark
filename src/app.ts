@@ -7,7 +7,10 @@ import dotenv from "dotenv";
 import topicRoutes from "./routes/topicRoutes";
 import resourceRoutes from "./routes/resourceRoutes";
 import authRoutes from "./routes/authRoutes";
+
+import { RequestIdMiddleware } from "./middleware/RequestId";
 import { ErrorHandler } from "./middleware/ErrorHandler";
+import { AttachLogger } from "./middleware/AttachLogger";
 
 dotenv.config();
 
@@ -58,6 +61,8 @@ app.get("/health", (req, res) => {
 });
 
 // Middleware de tratamento de erros (deve ser o último)
+app.use(RequestIdMiddleware);
+app.use(AttachLogger);
 app.use(ErrorHandler.notFound);
 app.use(ErrorHandler.handle);
 

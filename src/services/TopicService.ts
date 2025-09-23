@@ -2,6 +2,7 @@ import { ITopic } from "../models/types/ITopic";
 import { Topic } from "../models/Topic";
 import { TopicFactory } from "../models/TopicFactory";
 import { TopicRepository } from "../repositories/TopicRepository";
+import logger from "../utils/logger";
 
 export class TopicService {
   private repository: TopicRepository;
@@ -11,19 +12,21 @@ export class TopicService {
     this.repository = repository;
     this.factory = factory;
   }
-
-  /**
-   * Cria um novo tópico (topicId lógico + versão inicial = 1)
-   */
+  
   async createTopic(data: Omit<ITopic, "id" | "topicId" | "createdAt" | "updatedAt" | "version">): Promise<ITopic> {
     const topic = this.factory.createNew(data.name, data.content, data.parentTopicId);
     await this.repository.save(topic);
+
+    logger.info("topic_created", {
+      topicId: topic.topicId,
+      id: topic.id,
+      version: topic.version,
+      parentTopicId: topic.parentTopicId ?? null
+    });
+
     return topic;
   }
-
-  /**
-   * Cria uma nova versão de um tópico existente
-   */
+  
   async updateTopic(topicId: string, changes: Partial<Pick<ITopic, "name" | "content" | "parentTopicId">>): Promise<ITopic | null> {
     const latest = await this.getLatestTopic(topicId);
     if (!latest) return null;
@@ -36,6 +39,14 @@ export class TopicService {
       changes.parentTopicId !== undefined ? changes.parentTopicId : latest.parentTopicId
     );
     await this.repository.save(newVersion);
+
+    logger.info("topic_version_created", {
+      topicId: newVersion.topicId,
+      id: newVersion.id,
+      version: newVersion.version,
+      parentTopicId: newVersion.parentTopicId ?? null,
+    });
+
     return newVersion;
   }
 
