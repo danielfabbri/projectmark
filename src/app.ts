@@ -1,20 +1,16 @@
-import express, { Application } from "express";
+import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
 
+import topicRoutes from "./routes/topicRoutes";
+
 dotenv.config();
 
-const app: Application = express();
-
-// Middlewares básicos
+const app = express();
 app.use(cors());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 
-// Rotas (placeholder — depois você cria a pasta routes/)
-app.get("/", (req, res) => {
-  res.json({ message: "API Knowledge Base online 🚀" });
-});
+app.use("/topics", topicRoutes);
 
 export default app;
