@@ -9,5 +9,5 @@ export interface ITopicFactory {
   /**
    * Cria uma nova versão de um tópico existente
    */
-  createNewVersion(oldTopic: Topic, content: string): Topic;
+  createNewVersion(oldTopic: Topic, content: string, name?: string, parentTopicId?: string): Topic;
 }
