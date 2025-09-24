@@ -49,7 +49,7 @@ A comprehensive Node.js API for managing topics with versioning, hierarchical re
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/projectmark.git
+   git clone https://github.com/danielfabbri/projectmark.git
    cd projectmark
    ```
 
