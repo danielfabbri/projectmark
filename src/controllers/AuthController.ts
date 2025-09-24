@@ -21,14 +21,21 @@ export class AuthController {
     const loginDto = req.body as LoginDto;
 
     // Buscar usuário por email
-    let user = await userService.getUserByEmail(loginDto.email);
+    let user = await userService.getUserByEmail(loginDto.email ?? "");
     
     // Se não existir, criar novo usuário
     if (!user) {
+      if (
+        typeof loginDto.name !== "string" ||
+        typeof loginDto.email !== "string" ||
+        typeof loginDto.role !== "string"
+      ) {
+        throw new Error("Dados de usuário inválidos para criação.");
+      }
       user = await userService.createUser({
         name: loginDto.name,
         email: loginDto.email,
-        role: "viewer", // Role padrão
+        role: loginDto.role as "admin" | "editor" | "viewer",
       });
     }
 
@@ -87,7 +94,7 @@ export class AuthController {
    * Middleware para verificar se usuário é editor ou admin
    */
   static requireEditor(req: Request, res: Response, next: Function) {
-    if (!["admin", "editor"].includes(req.user?.role)) {
+    if (!["admin", "editor"].includes(req.user?.role ?? "")) {
       return res.status(403).json({ message: "Editor access required" });
     }
     next();

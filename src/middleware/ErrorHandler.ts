@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { AppError } from "../errors/AppError";
 import { ValidationError } from "class-validator";
-import logger from "../utils/logger"; // novo import
+import logger from "../utils/logger";
 
 interface ErrorResponse {
   status: number;
@@ -67,8 +67,7 @@ export class ErrorHandler {
         };
       }
     }
-
-    // 🔥 LOG estruturado com winston
+    
     logger.error("ErrorHandler caught an error", {
       statusCode,
       message,

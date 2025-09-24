@@ -4,6 +4,8 @@ import { AuthorizationMiddleware } from "../auth/AuthorizationMiddleware";
 import { ValidationMiddleware } from "../middleware/ValidationMiddleware";
 import { LoginDto } from "../dtos/LoginDto";
 
+// createUser
+
 const router = Router();
 
 // Rotas de autenticação com validação

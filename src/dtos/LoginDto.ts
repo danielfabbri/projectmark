@@ -5,11 +5,12 @@ export class LoginDto {
   @IsNotEmpty({ message: "Email is required" })
   @IsEmail({}, { message: "Email must be a valid email address" })
   @MaxLength(255, { message: "Email must not exceed 255 characters" })
-  email: string;
+  email: string | undefined;
 
   @IsString({ message: "Name must be a string" })
   @IsNotEmpty({ message: "Name is required" })
   @MinLength(1, { message: "Name must be at least 1 character long" })
   @MaxLength(255, { message: "Name must not exceed 255 characters" })
-  name: string;
+  name: string | undefined;
+  role: "admin" | "editor" | "viewer" | undefined;
 }

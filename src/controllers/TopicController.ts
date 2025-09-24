@@ -14,18 +14,32 @@ const service = new TopicService(repository, factory);
 export class TopicController {
     
   static async createTopic(req: Request, res: Response) {
-    const logger = (req as any).logger;
-
+    const logger = (req as any).logger || console;
+  
     try {
-      const { name, content, parentTopicId } = req.body;
+      const { name, content, parentTopicId } = req.body || {};
       logger.info("create_topic_request_received", { bodyPreview: { name, contentLength: (content || "").length } });
+  
       const createTopicDto = req.body as CreateTopicDto;
       const topic = await service.createTopic(createTopicDto);
+  
       logger.info("create_topic_request_success", { topicId: topic.topicId, id: topic.id });
       res.status(201).json(topic);
+  
     } catch (err: any) {
-      logger.error("create_topic_request_failed", { error: err?.message, stack: err?.stack });
-      res.status(500).json({ message: "error" });
+      // log seguro
+      const errorMessage = err?.message || "Unknown error";
+      const errorStack = err?.stack || "";
+      logger.error("create_topic_request_failed", { error: errorMessage, stack: errorStack });
+  
+      // retorno estruturado
+      res.status(500).json({
+        status: 500,
+        message: "Internal server error",
+        details: { error: errorMessage },
+        timestamp: new Date().toISOString(),
+        path: req.path
+      });
     }
   }
 

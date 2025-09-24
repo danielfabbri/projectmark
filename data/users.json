@@ -1,1 +1,26 @@
-[]
+[
+  {
+    "id": "93039f7a-f2b2-4c72-a395-9c1b72e38583",
+    "createdAt": "2025-09-24T00:01:32.816Z",
+    "updatedAt": "2025-09-24T00:01:32.816Z",
+    "name": "Lucas",
+    "email": "lucas@gmail.com",
+    "role": "viewer"
+  },
+  {
+    "id": "c235c650-639a-468e-89cd-beae62d74224",
+    "createdAt": "2025-09-24T00:02:48.214Z",
+    "updatedAt": "2025-09-24T00:02:48.214Z",
+    "name": "Daniel",
+    "email": "daniel@gmail.com",
+    "role": "viewer"
+  },
+  {
+    "id": "f082d75a-1aab-4aa6-8d22-6d98e4c9dc7e",
+    "createdAt": "2025-09-24T00:05:38.664Z",
+    "updatedAt": "2025-09-24T00:05:38.664Z",
+    "name": "Wendell",
+    "email": "wendell@gmail.com",
+    "role": "admin"
+  }
+]
